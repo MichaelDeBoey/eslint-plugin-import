@@ -6,6 +6,20 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+- add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
+- add TypeScript types ([#3097], thanks [@G-Rath])
+- [`extensions`]: add `pathGroupOverrides to allow enforcement decision overrides based on specifier ([#3105], thanks [@Xunnamius])
+
+### Fixed
+- [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
+
+### Changed
+- [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
+- [Docs] add flat config guide for using `tseslint.config()` ([#3125], thanks [@lnuvy])
+- [Docs] add missing comma ([#3122], thanks [@RyanGst])
+- [readme] Update flatConfig example to include typescript config ([#3138], thanks [@intellix])
+
 ## [2.31.0] - 2024-10-03
 
 ### Added
@@ -1103,10 +1117,12 @@ for info on changes for earlier releases.
 [`import/core-modules` setting]: ./README.md#importcore-modules
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 [`internal-regex` setting]: ./README.md#importinternal-regex
+[`import/node-version` setting]: ./README.md#importnode-version
 
 [`consistent-type-specifier-style`]: ./docs/rules/consistent-type-specifier-style.md
 [`default`]: ./docs/rules/default.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
+[`enforce-node-protocol-usage`]: ./docs/rules/enforce-node-protocol-usage.md
 [`export`]: ./docs/rules/export.md
 [`exports-last`]: ./docs/rules/exports-last.md
 [`extensions`]: ./docs/rules/extensions.md
@@ -1152,6 +1168,13 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
+[#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
+[#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122
+[#3116]: https://github.com/import-js/eslint-plugin-import/pull/3116
+[#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
+[#3105]: https://github.com/import-js/eslint-plugin-import/pull/3105
+[#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
@@ -1165,6 +1188,7 @@ for info on changes for earlier releases.
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
 [#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
 [#3032]: https://github.com/import-js/eslint-plugin-import/pull/3032
+[#3024]: https://github.com/import-js/eslint-plugin-import/pull/3024
 [#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
@@ -1784,7 +1808,6 @@ for info on changes for earlier releases.
 [@bicstone]: https://github.com/bicstone
 [@Blasz]: https://github.com/Blasz
 [@bmish]: https://github.com/bmish
-[@developer-bandi]: https://github.com/developer-bandi
 [@borisyankov]: https://github.com/borisyankov
 [@bradennapier]: https://github.com/bradennapier
 [@bradzacher]: https://github.com/bradzacher
@@ -1804,6 +1827,7 @@ for info on changes for earlier releases.
 [@darkartur]: https://github.com/darkartur
 [@davidbonnet]: https://github.com/davidbonnet
 [@dbrewer5]: https://github.com/dbrewer5
+[@developer-bandi]: https://github.com/developer-bandi
 [@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
@@ -1838,6 +1862,7 @@ for info on changes for earlier releases.
 [@georeith]: https://github.com/georeith
 [@giodamelio]: https://github.com/giodamelio
 [@gnprice]: https://github.com/gnprice
+[@GoldStrikeArch]: https://github.com/GoldStrikeArch
 [@golergka]: https://github.com/golergka
 [@golopot]: https://github.com/golopot
 [@GoodForOneFare]: https://github.com/GoodForOneFare
@@ -1850,6 +1875,7 @@ for info on changes for earlier releases.
 [@hulkish]: https://github.com/hulkish
 [@hyperupcall]: https://github.com/hyperupcall
 [@Hypnosphi]: https://github.com/Hypnosphi
+[@intellix]: https://github.com/intellix
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@ivo-stefchev]: https://github.com/ivo-stefchev
@@ -1897,9 +1923,10 @@ for info on changes for earlier releases.
 [@Librazy]: https://github.com/Librazy
 [@liby]: https://github.com/liby
 [@lilling]: https://github.com/lilling
+[@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx
-[@liuxingbaoyu]: https://github.com/liuxingbaoyu
+[@lnuvy]: https://github.com/lnuvy
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
@@ -1966,6 +1993,7 @@ for info on changes for earlier releases.
 [@rosswarren]: https://github.com/rosswarren
 [@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon
+[@RyanGst]: https://github.com/
 [@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w
 [@saschanaz]: https://github.com/saschanaz
 [@schmidsi]: https://github.com/schmidsi
@@ -1973,6 +2001,7 @@ for info on changes for earlier releases.
 [@Schweinepriester]: https://github.com/Schweinepriester
 [@scottnonnenberg]: https://github.com/scottnonnenberg
 [@sergei-startsev]: https://github.com/sergei-startsev
+[@sevenc-nanashi]: https://github.com/sevenc-nanashi
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
 [@sheepsteak]: https://github.com/sheepsteak
 [@silverwind]: https://github.com/silverwind
@@ -2018,6 +2047,7 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@Xunnamius]: https://github.com/Xunnamius
 [@yesl-kim]: https://github.com/yesl-kim
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis

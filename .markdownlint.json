@@ -1,5 +1,9 @@
 {
   "line-length": false,
+  "ignore_case": true,
+  "no-duplicate-heading": {
+    "siblings_only": true
+  },
   "ul-indent": {
     "start_indent": 1,
     "start_indented": true

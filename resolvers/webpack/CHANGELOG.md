@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## 0.13.10 - 2024-12-10
+- [new] add cache option ([#3100], thanks [@seiyab])
+
 ## 0.13.9 - 2024-09-02
 - [refactor] simplify loop ([#3029], thanks [@fregante])
 - [meta] add `repository.directory` field
@@ -182,6 +185,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
  - `interpret` configs (such as `.babel.js`). Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#3100]: https://github.com/import-js/eslint-plugin-import/pull/3100
 [#3029]: https://github.com/import-js/eslint-plugin-import/pull/3029
 [#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
 [#2023]: https://github.com/import-js/eslint-plugin-import/pull/2023
@@ -247,6 +251,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 [@Rogeres]: https://github.com/Rogeres
 [@Satyam]: https://github.com/Satyam
 [@Schweinepriester]: https://github.com/Schweinepriester
+[@seiyab]: https://github.com/seiyab
 [@SkeLLLa]: https://github.com/SkeLLLa
 [@taion]: https://github.com/taion
 [@toshafed]: https://github.com/toshafed
