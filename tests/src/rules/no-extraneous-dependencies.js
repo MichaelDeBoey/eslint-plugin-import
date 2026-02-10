@@ -188,6 +188,27 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         },
       },
     }),
+
+    // Alias that resolves outside the current package root but not in node_modules.
+    // Simulates a monorepo sibling package accessed via a webpack alias.
+    // The alias target (internal-modules/) is outside alias-outside-package/'s root.
+    test({
+      code: 'import "my-alias/api/service";',
+      filename: testFilePath('alias-outside-package/foo.js'),
+      settings: {
+        'import/resolver': {
+          webpack: {
+            config: {
+              resolve: {
+                alias: {
+                  'my-alias': testFilePath('internal-modules'),
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
   ],
   invalid: [
     test({

@@ -91,6 +91,19 @@ describe('importType(name)', function () {
     expect(importType('@/does-not-exist', pathContext)).to.equal('unknown');
   });
 
+  it("should return 'internal' for aliases that resolve outside the package root but not in node_modules", function () {
+    // Simulates a monorepo or workspace scenario where an alias resolves to a sibling package.
+    // The resolved path is OUTSIDE the current package root (alias-outside-package/)
+    // but is NOT in node_modules — it should be classified as 'internal', not 'external'.
+    const alias = { 'my-alias': path.join(pathToTestFiles, 'internal-modules') };
+    const webpackConfig = { resolve: { alias } };
+    const aliasContext = {
+      getFilename() { return testFilePath('alias-outside-package/foo.js'); },
+      settings: { 'import/resolver': { webpack: { config: webpackConfig } } },
+    };
+    expect(importType('my-alias/api/service', aliasContext)).to.equal('internal');
+  });
+
   it("should return 'parent' for internal modules that go through the parent", function () {
     expect(importType('../foo', context)).to.equal('parent');
     expect(importType('../../foo', context)).to.equal('parent');

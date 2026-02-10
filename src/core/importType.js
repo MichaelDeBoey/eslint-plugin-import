@@ -64,16 +64,33 @@ function isExternalPath(path, context) {
 
   const { settings } = context;
   const packagePath = getContextPackagePath(context);
-
-  if (relative(packagePath, path).startsWith('..')) {
-    return true;
-  }
-
   const folders = settings && settings['import/external-module-folders'] || ['node_modules'];
+
+  const isOutsidePackage = relative(packagePath, path).startsWith('..');
+
   return folders.some((folder) => {
+    // For absolute folder paths in external-module-folders, check directly
+    if (nodeIsAbsolute(folder)) {
+      return !relative(folder, path).startsWith('..');
+    }
+
+    // Check if the resolved path is under this external folder relative to the package
     const folderPath = nodeResolve(packagePath, folder);
-    const relativePath = relative(folderPath, path);
-    return !relativePath.startsWith('..');
+    if (!relative(folderPath, path).startsWith('..')) {
+      return true;
+    }
+
+    // For paths outside the package root (e.g., hoisted deps in a monorepo),
+    // check if the external module folder appears as a path segment in the resolved path.
+    // This detects e.g. /monorepo/node_modules/lodash (hoisted) → external,
+    // but NOT /monorepo/packages/shared/src (a monorepo sibling or alias target).
+    if (isOutsidePackage) {
+      const normalizedPath = path.replace(/\\/g, '/');
+      const cleanFolder = folder.replace(/[/\\]+$/, '');
+      return normalizedPath.includes(`/${cleanFolder}/`);
+    }
+
+    return false;
   });
 }
 
@@ -81,8 +98,10 @@ function isInternalPath(path, context) {
   if (!path) {
     return false;
   }
-  const packagePath = getContextPackagePath(context);
-  return !relative(packagePath, path).startsWith('../');
+  // A resolved path that is not classified as external is internal.
+  // This correctly handles aliases and monorepo siblings that resolve to paths
+  // outside the package root but are not in any external module folder (e.g., node_modules).
+  return !isExternalPath(path, context);
 }
 
 function isExternalLookingName(name) {
