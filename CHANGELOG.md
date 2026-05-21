@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
 
 ### Changed
+- [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
 
 ## [2.32.0] - 2025-06-20
@@ -1197,6 +1198,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
+[#3230]: https://github.com/import-js/eslint-plugin-import/pull/3230
 [#3247]: https://github.com/import-js/eslint-plugin-import/pull/3247
 [#3246]: https://github.com/import-js/eslint-plugin-import/pull/3246
 [#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
