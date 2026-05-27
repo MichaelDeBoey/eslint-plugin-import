@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235], thanks [@Sekhmet])
 - [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg] [@shastaxc])
 - [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
+- [`no-unused-modules`]: fall back to `listFilesWithNodeFs` on flat config without `.eslintrc` ([#3079], thanks [@rasmi] [@ronbraha])
 
 ### Changed
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
@@ -1226,6 +1227,7 @@ for info on changes for earlier releases.
 [#3105]: https://github.com/import-js/eslint-plugin-import/pull/3105
 [#3104]: https://github.com/import-js/eslint-plugin-import/pull/3104
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
+[#3079]: https://github.com/import-js/eslint-plugin-import/issues/3079
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
@@ -2069,6 +2071,7 @@ for info on changes for earlier releases.
 [@richardxia]: https://github.com/richardxia
 [@robertrossmann]: https://github.com/robertrossmann
 [@robyoder]: https://github.com/robyoder
+[@ronbraha]: https://github.com/ronbraha
 [@rosswarren]: https://github.com/rosswarren
 [@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon
