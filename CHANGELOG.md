@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg] [@shastaxc])
 - [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
 - [`no-unused-modules`]: fall back to `listFilesWithNodeFs` on flat config without `.eslintrc` ([#3079], thanks [@rasmi] [@ronbraha])
+- [`no-unused-modules`]: normalize path separators so `listFilesWithNodeFs` glob matching works on Windows ([#3230], thanks [@ljharb])
 
 ### Changed
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])

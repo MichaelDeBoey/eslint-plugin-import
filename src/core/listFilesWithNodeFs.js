@@ -64,7 +64,9 @@ export default function listFilesWithNodeFs(src, extensions) {
       // Expand braces, then take the base from the parsed pattern's leading
       // literal segments, mirroring how ESLint's FileEnumerator resolves globs.
       minimatch.braceExpand(pattern).forEach((expanded) => {
-        const mm = new Minimatch(resolve(expanded), minimatchOpts);
+        // `minimatch` only understands `/` separators; on Windows `resolve` yields `\`,
+        // which it would treat as escapes, so normalize before parsing/matching.
+        const mm = new Minimatch(resolve(expanded).replace(/\\/g, '/'), minimatchOpts);
         const segments = mm.set[0] || [];
         const baseParts = [];
         while (baseParts.length < segments.length && typeof segments[baseParts.length] === 'string') {
@@ -76,7 +78,8 @@ export default function listFilesWithNodeFs(src, extensions) {
         const recursive = globPart.length > 1 || globPart.indexOf(GLOBSTAR) !== -1;
         const allFiles = walkDirectory(base, normalizedExts, [], recursive);
         allFiles.forEach((file) => {
-          if (mm.match(file)) {
+          // match on a normalized path, but keep the native path in the results.
+          if (mm.match(file.replace(/\\/g, '/'))) {
             results.push(file);
           }
         });
