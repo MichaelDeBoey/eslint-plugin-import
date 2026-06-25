@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
 - [`no-unused-modules`]: fall back to `listFilesWithNodeFs` on flat config without `.eslintrc` ([#3079], thanks [@rasmi] [@ronbraha])
 - [`no-unused-modules`]: normalize path separators so `listFilesWithNodeFs` glob matching works on Windows ([#3230], thanks [@ljharb])
+- [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
 
 ### Changed
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
