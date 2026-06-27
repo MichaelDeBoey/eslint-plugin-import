@@ -33,6 +33,14 @@ function moduleNotFound() {
   throw e;
 }
 
+// ESLint v10 removed the legacy `glob-utils` from the package's `exports` map, so
+// requiring it throws `ERR_PACKAGE_PATH_NOT_EXPORTED` rather than `MODULE_NOT_FOUND`.
+function packagePathNotExported() {
+  const e = new Error('Package subpath \'./lib/util/glob-utils\' is not defined by "exports"');
+  e.code = 'ERR_PACKAGE_PATH_NOT_EXPORTED';
+  throw e;
+}
+
 describe('listFilesToProcess', function () {
   describe('listFilesUsingFileEnumerator', function () {
     const originalFlatConfig = process.env.ESLINT_USE_FLAT_CONFIG;
@@ -89,6 +97,15 @@ describe('listFilesToProcess', function () {
       const result = listFilesToProcess([f('src', 'a*.js')], ['.js'], {
         getFileEnumerator: () => undefined,
         getLegacyFiles: moduleNotFound,
+      });
+      expect(result).to.deep.equal([f('src', 'a.js')]);
+    });
+
+    // ESLint v10+: requiring the removed legacy module throws ERR_PACKAGE_PATH_NOT_EXPORTED.
+    it('falls back to listFilesWithNodeFs when the legacy module is no longer exported', function () {
+      const result = listFilesToProcess([f('src', 'a*.js')], ['.js'], {
+        getFileEnumerator: () => undefined,
+        getLegacyFiles: packagePathNotExported,
       });
       expect(result).to.deep.equal([f('src', 'a.js')]);
     });

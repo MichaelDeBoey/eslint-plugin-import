@@ -25,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
+- [Tests] cover ESLint 10 `getTokenOrComment` and `listFilesToProcess` API fallbacks ([#3230], thanks [@captaindonald])
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
 
 ## [2.32.0] - 2025-06-20
