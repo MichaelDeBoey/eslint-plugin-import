@@ -102,7 +102,7 @@ jobs:
           skip-ls-check: true
       - run: npm run pretest
       - run: npm run tests-only
-      - uses: codecov/codecov-action@v3.1.5
+      - uses: codecov/codecov-action@v7.0.0
 
   node:
     name: 'eslint 2 - 7'

@@ -151,7 +151,7 @@ jobs:
         }
 
     - name: codecov
-      uses: codecov/codecov-action@v3.1.5
+      uses: codecov/codecov-action@v7.0.0
 
   windows:
     runs-on: ubuntu-latest

@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
 - [Tests] cover ESLint 10 `getTokenOrComment` and `listFilesToProcess` API fallbacks ([#3230], thanks [@captaindonald])
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
+- [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1203,6 +1204,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3230]: https://github.com/import-js/eslint-plugin-import/pull/3230
 [#3247]: https://github.com/import-js/eslint-plugin-import/pull/3247
