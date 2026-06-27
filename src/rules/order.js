@@ -8,6 +8,7 @@ import trimEnd from 'string.prototype.trimend';
 
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
+import { getTokenOrCommentAfter, getTokenOrCommentBefore } from '../core/getTokenOrComment';
 import docsUrl from '../docsUrl';
 
 const categories = {
@@ -24,23 +25,11 @@ function reverse(array) {
   return array.map((v) => ({ ...v, rank: -v.rank })).reverse();
 }
 
-function getTokenOrCommentAfterCompat(sourceCode, nodeOrToken) {
-  return sourceCode.getTokenOrCommentAfter
-    ? sourceCode.getTokenOrCommentAfter(nodeOrToken)
-    : sourceCode.getTokenAfter(nodeOrToken, { includeComments: true });
-}
-
-function getTokenOrCommentBeforeCompat(sourceCode, nodeOrToken) {
-  return sourceCode.getTokenOrCommentBefore
-    ? sourceCode.getTokenOrCommentBefore(nodeOrToken)
-    : sourceCode.getTokenBefore(nodeOrToken, { includeComments: true });
-}
-
 function getTokensOrCommentsAfter(sourceCode, node, count) {
   let currentNodeOrToken = node;
   const result = [];
   for (let i = 0; i < count; i++) {
-    currentNodeOrToken = getTokenOrCommentAfterCompat(sourceCode, currentNodeOrToken);
+    currentNodeOrToken = getTokenOrCommentAfter(sourceCode, currentNodeOrToken);
     if (currentNodeOrToken == null) {
       break;
     }
@@ -53,7 +42,7 @@ function getTokensOrCommentsBefore(sourceCode, node, count) {
   let currentNodeOrToken = node;
   const result = [];
   for (let i = 0; i < count; i++) {
-    currentNodeOrToken = getTokenOrCommentBeforeCompat(sourceCode, currentNodeOrToken);
+    currentNodeOrToken = getTokenOrCommentBefore(sourceCode, currentNodeOrToken);
     if (currentNodeOrToken == null) {
       break;
     }

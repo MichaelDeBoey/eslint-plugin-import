@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
 
 ### Changed
+- [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
 
@@ -1876,6 +1877,7 @@ for info on changes for earlier releases.
 [@brettz9]: https://github.com/brettz9
 [@butterybread]: https://github.com/butterybread
 [@cakoose]: https://github.com/cakoose
+[@captaindonald]: https://github.com/captaindonald
 [@chabb]: https://github.com/chabb
 [@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
