@@ -61,6 +61,11 @@ describe('listFilesWithNodeFs', function () {
     expect(listFilesWithNodeFs([f('does-not-exist')], ['.js'])).to.deep.equal([]);
   });
 
+  it('silently skips a glob whose base directory does not exist', function () {
+    expect(() => listFilesWithNodeFs([f('does-not-exist', '*.js')], ['.js'])).to.not.throw();
+    expect(listFilesWithNodeFs([f('does-not-exist', '*.js')], ['.js'])).to.deep.equal([]);
+  });
+
   it('matches a single-star glob only in its base directory', function () {
     expect(listFilesWithNodeFs([f('src', '*.js')], ['.js']).sort()).to.deep.equal([
       f('src', 'a.js'),
