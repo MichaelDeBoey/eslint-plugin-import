@@ -100,6 +100,7 @@
     "lodash.isarray": "^4.0.0",
     "markdownlint-cli": "~0.35",
     "mocha": "^3.5.3",
+    "mock-property": "^1.1.2",
     "npm-which": "^3.0.1",
     "nyc": "^11.9.0",
     "redux": "^3.7.2",

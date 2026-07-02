@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
 - [`no-unused-modules`]: fall back to `listFilesWithNodeFs` on flat config without `.eslintrc` ([#3079], thanks [@rasmi] [@ronbraha])
 - [`no-unused-modules`]: normalize path separators so `listFilesWithNodeFs` glob matching works on Windows ([#3230], thanks [@ljharb])
+- [`no-unused-modules`]: honor the flat config's global `ignores` in the `listFilesWithNodeFs` fallback, restoring parity with the file set ESLint lints ([#3230], thanks [@ljharb])
 - [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
 
 ### Changed

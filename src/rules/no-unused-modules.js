@@ -4,7 +4,10 @@
  * @author René Fermann
  */
 
-import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
+import {
+  getCWD,
+  getPhysicalFilename,
+} from 'eslint-module-utils/contextCompat';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
@@ -133,10 +136,12 @@ const isNodeModule = (path) => (/\/(node_modules)\//).test(path);
 function resolveFiles(src, ignoreExports, context) {
   const extensions = Array.from(getFileExtensions(context.settings));
 
-  const srcFileList = listFilesToProcess(src, extensions);
+  const cwd = getCWD(context);
+
+  const srcFileList = listFilesToProcess(src, extensions, { cwd });
 
   // prepare list of ignored files
-  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
+  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions, { cwd });
 
   // The modern api will return a list of file paths, rather than an object
   if (ignoredFilesList.length && typeof ignoredFilesList[0] === 'string') {

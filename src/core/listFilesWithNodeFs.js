@@ -3,6 +3,8 @@ import { extname, join, resolve } from 'path';
 import isGlob from 'is-glob';
 import minimatch from 'minimatch';
 
+import getFlatConfigIgnores from './flatConfigIgnores';
+
 const { Minimatch, GLOBSTAR } = minimatch;
 const minimatchOpts = { dot: true, matchBase: true };
 
@@ -15,7 +17,7 @@ const minimatchOpts = { dot: true, matchBase: true };
  * @param {boolean} [recursive] - if `false`, do not descend into subdirectories
  * @returns {string[]} list of matched file paths
  */
-function walkDirectory(dir, extensions, results, recursive) {
+function walkDirectory(dir, extensions, results, recursive, ignores) {
   let names;
   try {
     names = fs.readdirSync(dir);
@@ -37,11 +39,14 @@ function walkDirectory(dir, extensions, results, recursive) {
       continue;
     }
     if (stat.isDirectory()) {
-      if (recursive !== false) {
-        walkDirectory(fullPath, extensions, results, recursive);
+      const directoryIgnored = ignores && ignores.isDirectoryIgnored(fullPath);
+      if (recursive !== false && !directoryIgnored) {
+        walkDirectory(fullPath, extensions, results, recursive, ignores);
       }
     } else if (stat.isFile() && extensions.indexOf(extname(fullPath)) > -1) {
-      results.push(fullPath);
+      if (!(ignores && ignores.isFileIgnored(fullPath))) {
+        results.push(fullPath);
+      }
     }
   }
 
@@ -51,12 +56,16 @@ function walkDirectory(dir, extensions, results, recursive) {
 /**
  * List files with Node.js fs + minimatch — the last tier of listFilesToProcess,
  * used when neither FileEnumerator nor the legacy APIs are requireable.
+ * Honors the flat config's global `ignores` (resolved from `cwd`) so the file set
+ * matches what ESLint itself would lint.
  * @param {string[]} src - list of file paths, directories, or glob patterns
  * @param {string[]} extensions - list of supported file extensions
+ * @param {string} [cwd] - directory to resolve the flat config (and its ignores) from
  * @returns {string[]} list of matched file paths
  */
-export default function listFilesWithNodeFs(src, extensions) {
+export default function listFilesWithNodeFs(src, extensions, cwd) {
   const normalizedExts = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
+  const ignores = getFlatConfigIgnores(cwd);
   const results = [];
 
   src.forEach((pattern) => {
@@ -76,7 +85,7 @@ export default function listFilesWithNodeFs(src, extensions) {
         const globPart = segments.slice(baseParts.length);
         // `src/*.js` stays in `src/`; `src/**/*.js` recurses.
         const recursive = globPart.length > 1 || globPart.indexOf(GLOBSTAR) !== -1;
-        const allFiles = walkDirectory(base, normalizedExts, [], recursive);
+        const allFiles = walkDirectory(base, normalizedExts, [], recursive, ignores);
         allFiles.forEach((file) => {
           // match on a normalized path, but keep the native path in the results.
           if (mm.match(file.replace(/\\/g, '/'))) {
@@ -89,9 +98,11 @@ export default function listFilesWithNodeFs(src, extensions) {
       try {
         const stat = fs.statSync(resolved);
         if (stat.isDirectory()) {
-          walkDirectory(resolved, normalizedExts, results);
+          walkDirectory(resolved, normalizedExts, results, true, ignores);
         } else if (stat.isFile() && normalizedExts.indexOf(extname(resolved)) > -1) {
-          results.push(resolved);
+          if (!(ignores && ignores.isFileIgnored(resolved))) {
+            results.push(resolved);
+          }
         }
       } catch (e) {
         // Path doesn't exist, skip it

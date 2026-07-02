@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import path from 'path';
+import mockProperty from 'mock-property';
 
 import listFilesWithNodeFs from 'core/listFilesWithNodeFs';
 import { getFilename } from '../utils';
@@ -97,5 +98,51 @@ describe('listFilesWithNodeFs', function () {
 
   it('returns an empty array for empty src', function () {
     expect(listFilesWithNodeFs([], ['.js'])).to.deep.equal([]);
+  });
+});
+
+describe('listFilesWithNodeFs, flat-config ignores', function () {
+  const igRoot = getFilename('listFilesWithNodeFs-flatignores');
+  const g = (...segments) => path.join(igRoot, ...segments);
+
+  it('honors the flat config global `ignores` resolved from cwd', function () {
+    expect(listFilesWithNodeFs([igRoot], ['.js'], igRoot).sort()).to.deep.equal([
+      g('eslint.config.js'),
+      g('keep.js'),
+      g('src', 'a.js'),
+    ]);
+  });
+
+  it('does not filter when no flat config is resolvable from cwd', function () {
+    const noConfigCwd = getFilename('listFilesWithNodeFs');
+    expect(listFilesWithNodeFs([igRoot], ['.js'], noConfigCwd).sort()).to.deep.equal([
+      g('eslint.config.js'),
+      g('ignored-dir', 'nested.js'),
+      g('ignored-file.js'),
+      g('keep.js'),
+      g('src', 'a.js'),
+    ]);
+  });
+
+  it('throws, rather than silently scanning ignored files, when a flat config has global `ignores` but no config-array implementation resolves', function () {
+    // stub every installed config-array copy (resolved both directly and from eslint's dir, as the
+    // code does) so accessing `ConfigArray` throws; copies that aren't installed already throw.
+    const eslintDir = path.dirname(require.resolve('eslint/package.json'));
+    const resolvedPaths = new Set();
+    ['@eslint/config-array', '@humanwhocodes/config-array'].forEach((name) => {
+      [null, { paths: [eslintDir] }].forEach((opts) => {
+        try {
+          resolvedPaths.add(opts ? require.resolve(name, opts) : require.resolve(name));
+        } catch (e) { /* not installed in this layout */ }
+      });
+    });
+    const stub = { loaded: true, exports: { get ConfigArray() { throw new Error('mocked: module absent'); } } };
+    const restores = [...resolvedPaths].map((resolved) => mockProperty(require.cache, resolved, { value: stub }));
+    try {
+      // a fresh cwd (not used by other tests) avoids the module-level predicate cache
+      expect(() => listFilesWithNodeFs([igRoot], ['.js'], g('src'))).to.throw(/@eslint\/config-array/);
+    } finally {
+      restores.forEach((restore) => restore());
+    }
   });
 });

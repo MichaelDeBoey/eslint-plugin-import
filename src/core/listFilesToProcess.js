@@ -40,7 +40,7 @@ function requireFileEnumerator() {
  * @param {string[]} extensions list of supported extensions
  * @returns {{ filename: string, ignored: boolean }[]} list of files to operate on
  */
-export function listFilesUsingFileEnumerator(FileEnumerator, src, extensions) {
+export function listFilesUsingFileEnumerator(FileEnumerator, src, extensions, cwd) {
   // We need to know whether this is being run with flat config in order to
   // determine how to report errors if FileEnumerator throws due to a lack of eslintrc.
 
@@ -74,7 +74,7 @@ export function listFilesUsingFileEnumerator(FileEnumerator, src, extensions) {
       isUsingFlatConfig
       && e.message.includes('No ESLint configuration found')
     ) {
-      return listFilesWithNodeFs(src, extensions);
+      return listFilesWithNodeFs(src, extensions, cwd);
     }
     throw e;
   }
@@ -124,21 +124,23 @@ function listFilesWithLegacyFunctions(src, extensions) {
  * with this rule.
  * @param {string} src - file, directory, or glob pattern of files to act on
  * @param {string[]} extensions - list of supported file extensions
- * @param {{ getFileEnumerator?: () => any, getLegacyFiles?: typeof listFilesWithLegacyFunctions }} [internals]
- *   injection seam for tests; production callers pass only `(src, extensions)`.
+ * @param {{ cwd?: string, getFileEnumerator?: () => any, getLegacyFiles?: typeof listFilesWithLegacyFunctions }} [options]
+ *   `cwd` resolves the flat config's ignores for the `listFilesWithNodeFs` fallback; the rest is an
+ *   injection seam for tests. Production callers pass `(src, extensions, { cwd })`.
  * @returns {string[] | { filename: string, ignored: boolean }[]} the list of files that this rule will evaluate.
  */
-export default function listFilesToProcess(src, extensions, internals) {
+export default function listFilesToProcess(src, extensions, options) {
   const {
+    cwd,
     getFileEnumerator = requireFileEnumerator,
     getLegacyFiles = listFilesWithLegacyFunctions,
-  } = internals || {};
+  } = options || {};
 
   const FileEnumerator = getFileEnumerator();
 
   // If we got the FileEnumerator, then let's go with that
   if (FileEnumerator) {
-    return listFilesUsingFileEnumerator(FileEnumerator, src, extensions);
+    return listFilesUsingFileEnumerator(FileEnumerator, src, extensions, cwd);
   }
   // If not, then we can try even older versions of this capability (listFilesToProcess)
   try {
@@ -146,7 +148,7 @@ export default function listFilesToProcess(src, extensions, internals) {
   } catch (e) {
     // If legacy functions are also unavailable (ESLint v10+), use Node.js fs as a fallback
     if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED') {
-      return listFilesWithNodeFs(src, extensions);
+      return listFilesWithNodeFs(src, extensions, cwd);
     }
     throw e;
   }
