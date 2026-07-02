@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.14.0 - 2026-07-02
+
 ### Added
  - add `contextCompat` `getCWD()` (thanks [@ljharb])
  - add eslint v10 support ([#3230], thanks [@rasmi])
