@@ -66,8 +66,19 @@ function getSourceCode(context) {
   return context.getSourceCode();
 }
 
+/** @type {import('./contextCompat').getCWD} */
+function getCWD(context) {
+  if ('cwd' in context) {
+    return context.cwd;
+  }
+  if (context.getCwd) {
+    return context.getCwd();
+  }
+}
+
 module.exports = {
   getAncestors,
+  getCWD,
   getDeclaredVariables,
   getFilename,
   getPhysicalFilename,

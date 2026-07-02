@@ -2,6 +2,7 @@ import { expect } from 'chai';
 
 import {
   getAncestors,
+  getCWD,
   getDeclaredVariables,
   getFilename,
   getPhysicalFilename,
@@ -36,6 +37,18 @@ describe('contextCompat', function () {
     it('falls back to context.getAncestors() when sourceCode lacks it', function () {
       const ancestors = [node];
       expect(getAncestors({ getSourceCode() { return {}; }, getAncestors() { return ancestors; } }, node)).to.equal(ancestors);
+    });
+  });
+
+  describe('getCWD', function () {
+    it('uses .cwd when available', function () {
+      const fakeContext = { cwd: 'foo', getCwd() { return 'bar'; } };
+      expect(getCWD(fakeContext)).to.equal('foo');
+    });
+
+    it('falls back to getCwd() when .cwd is not available', function () {
+      const fakeContext = { getCwd() { return 'bar'; } };
+      expect(getCWD(fakeContext)).to.equal('bar');
     });
   });
 
