@@ -51,6 +51,7 @@ function getScope(context, node) {
   const sourceCode = getSourceCode(context);
 
   if (sourceCode && sourceCode.getScope) {
+    // @ts-expect-error TODO: investigate why this is needed
     return sourceCode.getScope(node);
   }
 

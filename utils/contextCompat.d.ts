@@ -27,7 +27,7 @@ declare function getAncestors(context: Context, node: ESTree.Node): ESTree.Node[
 declare function getDeclaredVariables(context: Context, node: ESTree.Node): Scope.Variable[];
 declare function getFilename(context: Context): string;
 declare function getPhysicalFilename(context: Context): string;
-declare function getScope(context: Context, node: ESTree.Node): Scope.Scope;
+declare function getScope(context: Context, node?: ESTree.Node): Scope.Scope;
 declare function getSourceCode(context: Context): SourceCode;
 declare function getCWD(context: Context): string | undefined;
 
