@@ -3,7 +3,7 @@ import path from 'path';
 import mockProperty from 'mock-property';
 
 import listFilesWithNodeFs from 'core/listFilesWithNodeFs';
-import { getFilename } from '../utils';
+import { eslintVersionSatisfies, getFilename } from '../utils';
 
 // Fixture layout under tests/files/listFilesWithNodeFs/:
 //   README.md   top.js   top.ts
@@ -105,9 +105,23 @@ describe('listFilesWithNodeFs, flat-config ignores', function () {
   const igRoot = getFilename('listFilesWithNodeFs-flatignores');
   const g = (...segments) => path.join(igRoot, ...segments);
 
-  it('honors the flat config global `ignores` resolved from cwd', function () {
+  // flat config only exists as of ESLint 8.21: older versions never read `eslint.config.js`,
+  // so a discovered one is inert there and nothing may be filtered by it
+  const supportsFlatConfig = eslintVersionSatisfies('>= 8.21');
+
+  (supportsFlatConfig ? it : it.skip)('honors the flat config global `ignores` resolved from cwd', function () {
     expect(listFilesWithNodeFs([igRoot], ['.js'], igRoot).sort()).to.deep.equal([
       g('eslint.config.js'),
+      g('keep.js'),
+      g('src', 'a.js'),
+    ]);
+  });
+
+  (supportsFlatConfig ? it.skip : it)('ignores `eslint.config.js` entirely on an ESLint without flat config support', function () {
+    expect(listFilesWithNodeFs([igRoot], ['.js'], igRoot).sort()).to.deep.equal([
+      g('eslint.config.js'),
+      g('ignored-dir', 'nested.js'),
+      g('ignored-file.js'),
       g('keep.js'),
       g('src', 'a.js'),
     ]);
@@ -124,7 +138,7 @@ describe('listFilesWithNodeFs, flat-config ignores', function () {
     ]);
   });
 
-  it('throws, rather than silently scanning ignored files, when a flat config has global `ignores` but no config-array implementation resolves', function () {
+  (supportsFlatConfig ? it : it.skip)('throws, rather than silently scanning ignored files, when a flat config has global `ignores` but no config-array implementation resolves', function () {
     // stub every installed config-array copy (resolved both directly and from eslint's dir, as the
     // code does) so accessing `ConfigArray` throws; copies that aren't installed already throw.
     const eslintDir = path.dirname(require.resolve('eslint/package.json'));
