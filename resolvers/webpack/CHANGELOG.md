@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+- [tests] replace gist dep with local file dep
+- [deps] update `hasown`
 
 ## 0.13.11 - 2026-04-01
 - [deps] update `is-core-module`, `is-regex`, `lodash`, `resolve`
